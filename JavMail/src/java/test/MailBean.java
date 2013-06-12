@@ -1,4 +1,5 @@
 package test;
+
 /**
  *
  * @author emilia
@@ -28,11 +29,13 @@ public class MailBean {
     //date ce reprezinta sesiunea utilizatorului
     private java.util.Properties properties;
     private javax.mail.Session session;
-    
     private javax.mail.Store store;
     private javax.mail.Folder folder;
     String msgErrorConnection;
     private String username;
+    private String folderName;
+    private javax.mail.Message[] messages;
+    private javax.mail.internet.MimeMessage currentMessage;
 
     public MailBean() {
     }
@@ -202,5 +205,45 @@ public class MailBean {
 
     public String getMsgErrorConnection() {
         return msgErrorConnection;
+    }
+
+    //second page
+    public void openInbox() throws MessagingException {
+        //deschide inbox
+        folder = store.getFolder(folderName);
+        folder.open(Folder.READ_ONLY);
+
+        //obtine lista de mesaje si o afiseaza
+        messages = folder.getMessages();
+    }
+
+    public Message[] getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Message[] messages) {
+        this.messages = messages;
+    }
+
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
+
+    public String getFolderName() {
+        return folderName;
+    }
+
+    // page 3 view  message
+    public void readMsg(String s) throws MessagingException, NumberFormatException {
+        int msgNumber = Integer.parseInt(s);
+        currentMessage = (MimeMessage) this.messages[msgNumber];
+    }
+
+    public MimeMessage getCurrentMessage() {
+        return currentMessage;
+    }
+
+    public void setCurrentMessage(MimeMessage currentMessage) {
+        this.currentMessage = currentMessage;
     }
 }

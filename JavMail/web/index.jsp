@@ -32,6 +32,10 @@
             <tr>
                 <td> Incomig SMTP server :</td>
                 <td> <input type="text" name="incoming"/> </td>
+            </tr>            
+             <tr>
+                <td> Folder name(inbox)</td>
+                <td> <input type="text" name="folderName"/> </td>
             </tr>
             <tr>
                 <td> </td>
