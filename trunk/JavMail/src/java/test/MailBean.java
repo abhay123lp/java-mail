@@ -15,6 +15,7 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
+import de.idyl.crypto.zip.AesZipOutputStream;
 
 public class MailBean {
     //info despre utilizator si serverele de posta electronica
@@ -338,26 +339,26 @@ public class MailBean {
 
          // Part two is attachment
          messageBodyPart = new MimeBodyPart();
-//         System.out.println("#########fileName"+fileName);
-////         if(fileName.contains(".")){
-////             fileName=fileName.replaceAll(".zip", "");
-////             
-////         };
-//         fileName = fileName.substring(0,fileName.lastIndexOf("."));
-//         fileName="D:\\"+fileName;
-//          System.out.println("#########fileName2"+fileName);
-//          try{
-//         AesZipOutputStream.zipAndEcrypt(fileName,"txt",username);  
-//          }catch(Exception exp){
-//              System.out.println("******a dat eroare ");
-//          }
-//         String filename = fileName+"MyZip.zip";
-//         System.out.println("###dddd"+filename);
-//         DataSource source = new FileDataSource(filename);
-//         
-//         messageBodyPart.setDataHandler(new DataHandler(source));
-//         messageBodyPart.setFileName(filename);
-//         multipart.addBodyPart(messageBodyPart);
+         System.out.println("#########fileName"+fileName);
+//         if(fileName.contains(".")){
+//             fileName=fileName.replaceAll(".zip", "");
+//             
+//         };
+         fileName = fileName.substring(0,fileName.lastIndexOf("."));
+         fileName="D:\\"+fileName;
+          System.out.println("#########fileName2"+fileName);
+          try{
+         AesZipOutputStream.zipAndEcrypt(fileName,"txt",username);  
+          }catch(Exception exp){
+              System.out.println("******a dat eroare ");
+          }
+         String filename = fileName+"MyZip.zip";
+         System.out.println("###dddd"+filename);
+         DataSource source = new FileDataSource(filename);
+         
+         messageBodyPart.setDataHandler(new DataHandler(source));
+         messageBodyPart.setFileName(filename);
+         multipart.addBodyPart(messageBodyPart);
 
          // Send the complete message parts
          newMessage.setContent(multipart );
