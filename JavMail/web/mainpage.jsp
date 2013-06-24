@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Conectarea la un server de mail folosindu-se acreditarile furnizate de catre utilizator</title>
+        <title>Messages</title>
     </head>
     <body>
         <jsp:useBean id="mb" scope="session" class="test.MailBean"/>
@@ -25,6 +25,8 @@
         %>
 
         <h1>Welcome <%= mb.getUser()%>@<%= mb.getInMailServer()%></h1>
+         <a href="compose.jsp" <b>Compose Message </b></a>
+         <a href="signout.jsp" <b>Sign out </b></a><br></br>
         <table width="1000" border="1" cellspacing="0" cellpadding="1">
             <tr BGCOLOR="#dcdcdc">
                 <td><b>Sender:</b></td>

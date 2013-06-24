@@ -37,6 +37,16 @@ public class MailBean {
     private javax.mail.Message[] messages;
     private javax.mail.internet.MimeMessage currentMessage;
 
+    
+     //date ce reprezinta mesajul ce va transmis 
+    private javax.mail.internet.MimeMessage newMessage;
+    private String to;
+    private String cc;
+    private String bcc;
+    private String subject;
+    private String body;  
+    private String contentAttach;
+    
     public MailBean() {
     }
 
@@ -246,4 +256,128 @@ public class MailBean {
     public void setCurrentMessage(MimeMessage currentMessage) {
         this.currentMessage = currentMessage;
     }
+    
+     public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+ public String getBcc() {
+        return bcc;
+    }
+
+    public void setBcc(String bcc) {
+        this.bcc = bcc;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
+            
+    public String getContentAttach() {
+        return contentAttach;
+    }
+
+    public void setContentAttach(String contentAttach) {
+        this.contentAttach = contentAttach;
+    }
+
+    public MimeMessage getNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(MimeMessage newMessage) {
+        this.newMessage = newMessage;
+    }
+    
+     public void sendMsg() throws AddressException,SendFailedException ,MessagingException, IOException{
+        properties =System.getProperties();
+      //  properties.put("smtp.mail.yahoo.com",outMailServer);
+        session= Session.getInstance(properties,null);
+        //Completeaza anteturile mesajului 
+        newMessage=new MimeMessage(session);
+        String from =user;
+        newMessage.setFrom(new InternetAddress(from));
+        newMessage.setSubject(subject);
+        newMessage.setText(body);
+        
+        // Create the message part 
+         BodyPart messageBodyPart = new MimeBodyPart();
+
+         // Fill the message
+         messageBodyPart.setText(body);
+         
+         // Create a multipar message
+         Multipart multipart = new MimeMultipart();
+
+         // Set text message part
+         multipart.addBodyPart(messageBodyPart);
+
+         // Part two is attachment
+         messageBodyPart = new MimeBodyPart();
+//         System.out.println("#########fileName"+fileName);
+////         if(fileName.contains(".")){
+////             fileName=fileName.replaceAll(".zip", "");
+////             
+////         };
+//         fileName = fileName.substring(0,fileName.lastIndexOf("."));
+//         fileName="D:\\"+fileName;
+//          System.out.println("#########fileName2"+fileName);
+//          try{
+//         AesZipOutputStream.zipAndEcrypt(fileName,"txt",username);  
+//          }catch(Exception exp){
+//              System.out.println("******a dat eroare ");
+//          }
+//         String filename = fileName+"MyZip.zip";
+//         System.out.println("###dddd"+filename);
+//         DataSource source = new FileDataSource(filename);
+//         
+//         messageBodyPart.setDataHandler(new DataHandler(source));
+//         messageBodyPart.setFileName(filename);
+//         multipart.addBodyPart(messageBodyPart);
+
+         // Send the complete message parts
+         newMessage.setContent(multipart );
+        
+        
+        Address[] toAdresses=InternetAddress.parse(to);
+        newMessage.addRecipients(Message.RecipientType.TO, toAdresses);
+        Address [] ccAddresses=InternetAddress.parse(cc);
+        newMessage.setRecipients(Message.RecipientType.CC, ccAddresses);
+        Address [] bccAddresses=InternetAddress.parse(bcc);
+        newMessage.setRecipients(Message.RecipientType.BCC, bccAddresses);
+        
+        //conectare la transport (daca este necesar inserati numele si parola)
+        Transport transport= session.getTransport("smtps");
+         transport.connect(outMailServer, 465  , user, password);
+        
+        //trimite mesajul
+        transport.sendMessage(newMessage, newMessage.getAllRecipients());
+        transport.close();        
+    }
+
+    
 }
